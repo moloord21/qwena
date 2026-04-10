@@ -214,6 +214,9 @@ async function cutPDF() {
         editorSection.style.display = 'none';
         processingSection.style.display = 'block';
         
+        // إضافة تأخير بسيط للسماح بتحديث الواجهة
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
         // تحميل PDF باستخدام pdf-lib
         const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
         const newPdf = await PDFLib.PDFDocument.create();
@@ -221,12 +224,16 @@ async function cutPDF() {
         // تحويل Set إلى Array وفرز الصفحات
         const sortedPages = Array.from(selectedPages).sort((a, b) => a - b);
         
-        // نسخ الصفحات المحددة
+        // نسخ الصفحات المحددة (pdf-lib يستخدم الفهرس من 0)
         const copiedPages = await newPdf.copyPages(pdfDoc, sortedPages.map(p => p - 1));
         copiedPages.forEach(page => newPdf.addPage(page));
         
         // حفظ الملف الجديد
-        const pdfDataUri = await newPdf.saveAsBase64({ dataUri: true });
+        const pdfBytesOutput = await newPdf.save();
+        
+        // تحويل إلى Blob وإنشاء URL
+        const blob = new Blob([pdfBytesOutput], { type: 'application/pdf' });
+        const pdfDataUri = URL.createObjectURL(blob);
         
         // إخفاء المعالجة وإظهار النتيجة
         processingSection.style.display = 'none';
@@ -239,7 +246,7 @@ async function cutPDF() {
         
     } catch (error) {
         console.error('Error cutting PDF:', error);
-        alert('حدث خطأ أثناء قص الملف. الرجاء المحاولة مرة أخرى.');
+        alert('حدث خطأ أثناء قص الملف. الرجاء المحاولة مرة أخرى.\nالتفاصيل: ' + error.message);
         resetApp();
     }
 }
