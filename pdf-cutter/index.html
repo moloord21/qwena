@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قص ملفات PDF - أداة احترافية</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-cut"></i> قص ملفات PDF</h1>
+            <p class="subtitle">أداة احترافية لقص وتقسيم ملفات PDF بسهولة وسرعة</p>
+        </header>
+
+        <main>
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h3>اسحب ملف PDF وأفلته هنا</h3>
+                    <p>أو انقر لاختيار ملف من جهازك</p>
+                    <input type="file" id="fileInput" accept=".pdf" hidden>
+                    <button class="btn-primary" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-folder-open"></i> اختر ملف PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-section" id="editorSection" style="display: none;">
+                <div class="file-info">
+                    <i class="fas fa-file-pdf"></i>
+                    <span id="fileName">اسم الملف.pdf</span>
+                    <button class="btn-secondary btn-sm" onclick="resetApp()">
+                        <i class="fas fa-redo"></i> ملف جديد
+                    </button>
+                </div>
+
+                <div class="pages-container" id="pagesContainer">
+                    <!-- سيتم إضافة صفحات PDF هنا -->
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label>نطاق الصفحات:</label>
+                        <div class="range-inputs">
+                            <input type="number" id="startPage" min="1" value="1" placeholder="من">
+                            <span>إلى</span>
+                            <input type="number" id="endPage" min="1" value="" placeholder="إلى">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>تحديد سريع:</label>
+                        <div class="quick-select">
+                            <button class="btn-outline" onclick="selectAll()">الكل</button>
+                            <button class="btn-outline" onclick="selectOdd()">فردية</button>
+                            <button class="btn-outline" onclick="selectEven()">زوجية</button>
+                            <button class="btn-outline" onclick="clearSelection()">مسح</button>
+                        </div>
+                    </div>
+
+                    <div class="selected-count" id="selectedCount">
+                        <span id="countValue">0</span> صفحة محددة
+                    </div>
+
+                    <button class="btn-success btn-large" onclick="cutPDF()">
+                        <i class="fas fa-cut"></i> قص الصفحات المحددة
+                    </button>
+                </div>
+            </div>
+
+            <div class="processing-section" id="processingSection" style="display: none;">
+                <div class="spinner"></div>
+                <h3>جاري المعالجة...</h3>
+                <p id="processStatus">جاري قص الصفحات</p>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h3>تم القص بنجاح!</h3>
+                <p id="resultInfo">تم إنشاء ملف PDF جديد بـ <span id="pageCount">0</span> صفحة</p>
+                
+                <div class="result-actions">
+                    <a id="downloadLink" class="btn-primary btn-large">
+                        <i class="fas fa-download"></i> تحميل الملف
+                    </a>
+                    <button class="btn-secondary btn-large" onclick="resetApp()">
+                        <i class="fas fa-plus"></i> ملف جديد
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2024 أداة قص PDF - جميع الحقوق محفوظة</p>
+            <div class="features">
+                <span><i class="fas fa-shield-alt"></i> آمن 100%</span>
+                <span><i class="fas fa-bolt"></i> سريع</span>
+                <span><i class="fas fa-lock"></i> خصوصية تامة</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
